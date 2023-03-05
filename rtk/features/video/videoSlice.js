@@ -1,4 +1,4 @@
-const { createSlice } = require("@reduxjs/toolkit");
+const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
 //initial state
 const initialState = {
@@ -14,6 +14,14 @@ const initialState = {
         error: ''
     }
 };
+
+//Thunk Function to call api for video
+const fetchVideo = createAsyncThunk("video/fetchVideo", async () => {
+    const response = await fetch("http://localhost:9000/videos");
+    const data = response.json();
+
+    return data;
+})
 
 //create slice
 const videoSlice = createSlice({
