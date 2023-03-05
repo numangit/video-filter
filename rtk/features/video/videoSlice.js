@@ -3,10 +3,9 @@ const fetch = require('node-fetch');
 
 //initial state
 const initialState = {
-    videoTags: [],
     video: {
         loading: false,
-        videoData: [],
+        videoTags: [],
         error: ''
     },
     relatedVideos: {
@@ -33,6 +32,21 @@ const videoSlice = createSlice({
     //         state.videoTags = action.payload.tags;
     //     }
     // }
+    extraReducers: (builder) => {
+        builder.addCase(fetchVideo.pending, (state) => {
+            state.video.loading = true;
+        })
+
+        builder.addCase(fetchVideo.fulfilled, (state, action) => {
+            state.video.loading = false;
+            state.video.videoTags = action.payload.tags;
+        })
+
+        builder.addCase(fetchVideo.rejected, (state, action) => {
+            state.video.loading = false;
+            state.video.error = action.error;
+        })
+    }
 });
 
 module.exports = videoSlice.reducer;
