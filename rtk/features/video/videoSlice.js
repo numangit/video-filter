@@ -24,4 +24,7 @@ const videoSlice = createSlice({
     //         state.videoTags = action.payload.tags;
     //     }
     // }
-})
+});
+
+module.exports = videoSlice.reducer;
+// module.exports = videoSlice.reducer;
