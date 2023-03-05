@@ -1,4 +1,5 @@
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
+const fetch = require('node-fetch');
 
 //initial state
 const initialState = {
@@ -36,3 +37,4 @@ const videoSlice = createSlice({
 
 module.exports = videoSlice.reducer;
 // module.exports = videoSlice.reducer;
+module.exports.fetchVideo = fetchVideo;
