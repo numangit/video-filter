@@ -60,11 +60,11 @@ const videoSlice = createSlice({
         })
 
         builder.addCase(fetchRelatedVideos.fulfilled, (state, action) => {
-            const fetchedVideos = action.payload;
-            fetchedVideos?.sort((a, b) => (parseFloat(a.views.slice(0, -1)) > parseFloat(b.views.slice(0, -1)) ? -1 : 1))
+            const sortedVideos = action.payload;
+            sortedVideos?.sort((a, b) => (parseFloat(a.views.slice(0, -1)) > parseFloat(b.views.slice(0, -1)) ? -1 : 1))
 
             state.relatedVideos.loading = false;
-            state.relatedVideos.relatedVideosData = fetchedVideos;
+            state.relatedVideos.relatedVideosData = sortedVideos;
         })
 
         builder.addCase(fetchRelatedVideos.rejected, (state, action) => {
