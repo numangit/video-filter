@@ -26,7 +26,6 @@ const fetchVideo = createAsyncThunk("video/fetchVideo", async () => {
 
 //Thunk function to call 
 const fetchRelatedVideos = createAsyncThunk("video/fetchRelatedVideo", async (videoTags) => {
-    console.log("fetched:", videoTags);
 
     let queryString = videoTags.join('&tags_like=');
 
@@ -61,8 +60,11 @@ const videoSlice = createSlice({
         })
 
         builder.addCase(fetchRelatedVideos.fulfilled, (state, action) => {
+            const fetchedVideos = action.payload;
+            fetchedVideos?.sort((a, b) => (parseFloat(a.views.slice(0, -1)) > parseFloat(b.views.slice(0, -1)) ? -1 : 1))
+
             state.relatedVideos.loading = false;
-            state.relatedVideos.relatedVideosData = action.payload;
+            state.relatedVideos.relatedVideosData = fetchedVideos;
         })
 
         builder.addCase(fetchRelatedVideos.rejected, (state, action) => {
