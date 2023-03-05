@@ -5,12 +5,13 @@ const fetch = require('node-fetch');
 const initialState = {
     video: {
         loading: false,
+        videoObject: {},
         videoTags: [],
         error: ''
     },
     relatedVideos: {
         loading: false,
-        videoData: [],
+        relatedVideosData: [],
         error: ''
     }
 };
@@ -21,17 +22,24 @@ const fetchVideo = createAsyncThunk("video/fetchVideo", async () => {
     const data = response.json();
 
     return data;
+});
+
+//Thunk function to call 
+const fetchRelatedVideos = createAsyncThunk("video/fetchRelatedVideo", async (videoTags) => {
+    console.log("fetched:", videoTags);
+
+    let queryString = videoTags.join('&tags_like=');
+
+    const response = await fetch(`http://localhost:9000/videos?tags_like=${queryString}`);
+    const data = response.json();
+
+    return data;
 })
 
 //create slice
 const videoSlice = createSlice({
     name: 'video',
     initialState,
-    // reducers: {
-    //     filterTags: (state, action) => {
-    //         state.videoTags = action.payload.tags;
-    //     }
-    // }
     extraReducers: (builder) => {
         builder.addCase(fetchVideo.pending, (state) => {
             state.video.loading = true;
@@ -39,6 +47,7 @@ const videoSlice = createSlice({
 
         builder.addCase(fetchVideo.fulfilled, (state, action) => {
             state.video.loading = false;
+            state.video.videoObject = action.payload;
             state.video.videoTags = action.payload.tags;
         })
 
@@ -46,9 +55,23 @@ const videoSlice = createSlice({
             state.video.loading = false;
             state.video.error = action.error;
         })
+
+        builder.addCase(fetchRelatedVideos.pending, (state) => {
+            state.relatedVideos.loading = true;
+        })
+
+        builder.addCase(fetchRelatedVideos.fulfilled, (state, action) => {
+            state.relatedVideos.loading = false;
+            state.relatedVideos.relatedVideosData = action.payload;
+        })
+
+        builder.addCase(fetchRelatedVideos.rejected, (state, action) => {
+            state.relatedVideos.loading = false;
+            state.relatedVideos.error = action.error;
+        })
     }
 });
 
 module.exports = videoSlice.reducer;
-// module.exports = videoSlice.reducer;
 module.exports.fetchVideo = fetchVideo;
+module.exports.fetchRelatedVideos = fetchRelatedVideos;
