@@ -3,8 +3,5 @@ const { fetchVideo, fetchRelatedVideos } = require('./rtk/features/video/videoSl
 
 // store.subscribe();
 //dispatch actions
-store.dispatch(fetchVideo());
-
-setTimeout(() => {
-    store.dispatch(fetchRelatedVideos(store.getState().video.video.videoTags));
-}, 10);
+store.dispatch(fetchVideo())
+    .then(data => store.dispatch(fetchRelatedVideos(data.payload.tags)))

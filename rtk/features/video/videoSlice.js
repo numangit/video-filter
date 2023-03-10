@@ -6,7 +6,6 @@ const initialState = {
     video: {
         loading: false,
         videoObject: {},
-        videoTags: [],
         error: ''
     },
     relatedVideos: {
@@ -47,7 +46,6 @@ const videoSlice = createSlice({
         builder.addCase(fetchVideo.fulfilled, (state, action) => {
             state.video.loading = false;
             state.video.videoObject = action.payload;
-            state.video.videoTags = action.payload.tags;
         })
 
         builder.addCase(fetchVideo.rejected, (state, action) => {
